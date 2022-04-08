@@ -137,7 +137,7 @@ class HAN:
         """define all weights here"""
         with tf.name_scope("embedding_projection"):  # embedding matrix
             self.Embedding = tf.get_variable("Embedding", shape=[self.vocab_size, self.embed_size],
-                                             initializer=self.initializer, reuse=tf.AUTO_REUSE)  # [vocab_size,embed_size] tf.random_uniform([self.vocab_size, self.embed_size],-1.0,1.0)
+                                             initializer=self.initializer)  # [vocab_size,embed_size] tf.random_uniform([self.vocab_size, self.embed_size],-1.0,1.0)
             self.W_projection = tf.get_variable("W_projection", shape=[self.hidden_size * 4, self.num_classes],
                                                 initializer=self.initializer)  # [embed_size,label_size] # this parameter matrix will be initialised if choosing FLAS.use_label_embedding
             self.b_projection = tf.get_variable("b_projection", shape=[self.num_classes])  #TODO [label_size]
