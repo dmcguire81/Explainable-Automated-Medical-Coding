@@ -29,11 +29,11 @@ The key computation graph is implemented in [```def inference_per_label(self)```
 # How to Train on New Data
 * First, format your data where each line has the format `doc__label__labelA labelB labelC`, for details see [`datasets`](https://github.com/acadTags/Explainable-Automated-Medical-Coding/tree/master/datasets). The data can be either split to train\[-validation\]-test (each split as a single file) or without split (only one data file). 
 * Second, prepare word embeddings and the optional label embeddings using Gensim package, using existing embeddings or those trained from your texts (e.g. using script in [`embeddings`](https://github.com/acadTags/Explainable-Automated-Medical-Coding/tree/master/embeddings), also see the [`notebook from caml-mimic`](https://github.com/jamesmullenbach/caml-mimic/blob/master/notebooks/dataproc_mimic_III.ipynb) for embedding from MIMIC-III. The trained embeddings from MIMIC-III can be [`downloaded from onedrive (3.5G with other files)`](https://onedrive.live.com/?authkey=%21ACZVuCnEV2zDKow&id=22F95C44F607EC5B%21255141&cid=22F95C44F607EC5B)).
-* Third, add a new data block ([`if FLAGS.dataset == "YOUR_DATASET_NAME":`](https://github.com/acadTags/Explainable-Automated-Medical-Coding/blob/master/HLAN/HAN_train.py#L148)) with variables specified in `HAN_train.py`. Please read closely the example code block and comments provided.
+* Third, add a new data block ([`if FLAGS.dataset == "YOUR_DATASET_NAME":`](https://github.com/acadTags/Explainable-Automated-Medical-Coding/blob/master/HLAN/HAN_train.py#L148)) with variables specified in `HAN_train.py`. Please read closely the example code block and comments provided. For MIMIC-III dataset settings, use the existing data blocks in the code.
 * Finally, run commands (e.g. `python HAN_train.py --dataset YOUR_DATASET_NAME`) with arguments, see details in [`Training the models`](https://github.com/acadTags/Explainable-Automated-Medical-Coding/blob/master/README.md#training-the-models).
 
 # Jupyter Notebook Demo with MIMIC-III ICD Coding
-* First, ensure that you have requested the MIMIC-III dataset, see [the official page to request MIMIC-III](https://mimic.physionet.org/gettingstarted/access/). Place the files ```D_ICD_DIAGNOSES.csv``` and ```D_ICD_PROCEDURES.csv``` under the ```knowledge_bases``` folder.
+* First, ensure that you have requested the MIMIC-III dataset. Place the files ```D_ICD_DIAGNOSES.csv``` and ```D_ICD_PROCEDURES.csv``` under the ```knowledge_bases``` folder.
 
 * Second, download the files in ```checkpoints```, ```cache_vocabulary_label_pik```, and ```embeddings``` folders from Onedrive ([`link (3.5G with other files)`](https://onedrive.live.com/?authkey=%21ACZVuCnEV2zDKow&id=22F95C44F607EC5B%21255141&cid=22F95C44F607EC5B)).
 
@@ -54,6 +54,9 @@ The key computation graph is implemented in [```def inference_per_label(self)```
 * ```./results-HEALTAC 2020``` contains the CNN, CNN+att, Bi-GRU, BERT results with label embedding initilisation
 
 # Key Configurations and Further Details
+
+## Reproducing results from the paper
+After getting access to MIMIC-III, obtain the data split from CAML using [their preprocessing script](https://github.com/jamesmullenbach/caml-mimic/blob/master/notebooks/dataproc_mimic_III.ipynb). Then follow the [steps in "How to Train on New Data"](https://github.com/acadTags/Explainable-Automated-Medical-Coding#how-to-train-on-new-data).
 
 ## Training the models
 
@@ -142,7 +145,7 @@ def _code_emb_init(self, code_emb, code_list):
 ```
 
 ## Dataset and preprocessing
-We used [the MIMIC-III dataset](https://mimic.physionet.org/) with the preprocessing steps from [caml-mimic](https://github.com/jamesmullenbach/caml-mimic) to generate the two dataset settings MIMIC-III and MIMIC-III-50. We also created a MIMIC-III-shielding dataset based on the NHS shielding ICD-10 codes.
+We used [the MIMIC-III dataset](https://mimic.physionet.org/) with the preprocessing steps from [caml-mimic](https://github.com/jamesmullenbach/caml-mimic) to generate the two dataset settings MIMIC-III and MIMIC-III-50. We also created a MIMIC-III-shielding dataset based on the NHS shielding ICD-10 codes. See details in the [datasets](https://github.com/acadTags/Explainable-Automated-Medical-Coding/tree/master/datasets) page.
 
 ## Pre-training of label embeddings
 We used the Continous Bag-of-Words algorithm (CBoW) in Gensim word2vec (see [gensim.models.word2vec.Word2Vec](https://radimrehurek.com/gensim/models/word2vec.html#gensim.models.word2vec.Word2Vec), on all label sets in the training data. Codes for training word and label embeddings are available in [```train_word_embedding.py```](https://github.com/acadTags/Explainable-Automated-Medical-Coding/blob/master/embeddings/train_word_embedding.py) and [```train_code_embedding.py```](https://github.com/acadTags/Explainable-Automated-Medical-Coding/blob/master/embeddings/train_code_embedding.py).
